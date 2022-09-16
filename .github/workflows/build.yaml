@@ -1,0 +1,68 @@
+---
+name: Release
+
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    release:
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest, windows-latest]
+                include:
+                    - os: ubuntu-latest
+                      release_suffix: Linux
+                    - os: macos-latest
+                      release_suffix: Mac
+                    - os: windows-latest
+                      release_suffix: Windows
+
+        runs-on: ${{matrix.os}}
+        name: Release
+        steps:
+            - name: 🛒 Checkout Code
+              uses: actions/checkout@v3
+
+            - name: 🖊️ Install Poetry
+              run: pipx install poetry
+
+            - name: 🐍 Setup Python
+              uses: actions/setup-python@v4.2.0
+              with:
+                  python-version: "3.10"
+                  cache: poetry
+
+            - name: 🔨 Install Dependencies
+              run: |
+                  poetry env use 3.10
+                  poetry install
+
+            - name: 💾 Cache Mypy
+              uses: actions/cache@v3
+              with:
+                  path: .mypy_cache
+                  key: mypy-cache
+
+            - name: 🔎 Pre-commit Checks
+              uses: pre-commit/action@v2.0.3
+
+            - name: 🧪 Pytest
+              run: poetry run pytest
+
+            - name: 🏗️ Build Binaries
+              run: poetry run pyinstaller wotr_log_annotator/__main__.py --name wotr_log_annotator
+
+            - name: 📦 Package Binaries
+              uses: vimtor/action-zip@v1
+              with:
+                  files: dist/
+                  dest: wotr_logfile_annotator.zip
+
+            - name: ✅ Create Release
+              uses: ncipollo/release-action@v1.10.0
+              with:
+                  draft: false
+                  artifacts: wotr_logfile_annotator.zip
+                  name: Release ${{ github.ref }} ${{ matrix.release_suffix }}
