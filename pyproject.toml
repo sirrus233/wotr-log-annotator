@@ -5,7 +5,7 @@ license = "MIT"
 name = "wotr-log-annotator"
 packages = [{ include = "wotr_log_annotator" }]
 readme = "README.md"
-version = "1.0.2"
+version = "1.0.3"
 
 [tool.poetry.dependencies]
 appdirs = "^1.4.4"

@@ -52,7 +52,7 @@ jobs:
               run: poetry run pytest
 
             - name: 🏗️ Build Binaries
-              run: poetry run pyinstaller --name wotr_log_annotator --noconsole wotr_log_annotator/__main__.py 
+              run: poetry run pyinstaller --name wotr_log_annotator --noconsole --onefile wotr_log_annotator/__main__.py
 
             - name: 📦 Package Binaries
               uses: vimtor/action-zip@v1
