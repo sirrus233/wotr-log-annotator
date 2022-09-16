@@ -2,9 +2,11 @@
 import os
 import sys
 import tkinter as tk
+from pathlib import Path
 from tkinter import filedialog, ttk
 
-LOG_DIR = "C:\\Games\\War of the Ring\\logs"
+from appdirs import user_cache_dir
+
 VIEW_FREE_CMD = "<~Controls.464~>"
 VIEW_SHADOW_CMD = "<~Controls.479~>"
 
@@ -16,7 +18,7 @@ class App(tk.Tk):
         super().__init__()
 
         # Basic app configuration
-        self.title("War of the Ring Logfile Updater")
+        self.title("War of the Ring Logfile Annotator")
         self.geometry("350x120")
 
         # App state variables
@@ -60,8 +62,18 @@ class App(tk.Tk):
         """Update the application state with a selected logfile. This selected log will
         have its name displayed to the user, and will be modified upon confirmation.
         """
-        self.selected_logfile_path = filedialog.askopenfilename(initialdir=LOG_DIR)
+        initialdir = ""
+        cache_dir = user_cache_dir(appname="wotr_logfile_annotator", appauthor=None)
+        cache_file = "cache"
+
+        with open(Path(cache_dir, cache_file), "r", encoding="utf8") as cache:
+            initialdir = cache.read()
+
+        self.selected_logfile_path = filedialog.askopenfilename(initialdir=initialdir)
         self.selected_logfile_display.set(os.path.basename(self.selected_logfile_path))
+
+        with open(Path(cache_dir, cache_file), "w", encoding="utf8") as cache:
+            cache.write(str(Path(self.selected_logfile_path, os.pardir)))
 
     def modify_logfile(self) -> None:
         """Write passwords to the logfile, and then exit the application.
