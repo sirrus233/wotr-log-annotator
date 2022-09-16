@@ -3,7 +3,6 @@ import os
 import sys
 import tkinter as tk
 from tkinter import filedialog, ttk
-from typing import NoReturn
 
 LOG_DIR = "C:\\Games\\War of the Ring\\logs"
 VIEW_FREE_CMD = "<~Controls.464~>"
@@ -54,7 +53,7 @@ class App(tk.Tk):
         self.selected_logfile_path = filedialog.askopenfilename(initialdir=LOG_DIR)
         self.selected_logfile_display.set(os.path.basename(self.selected_logfile_path))
 
-    def modify_logfile(self) -> NoReturn:
+    def modify_logfile(self) -> None:
         """Write passwords to the logfile, and then exit the application.
 
         In the WotR Java client, if passwords are input prior to the point where BOTH
@@ -65,10 +64,11 @@ class App(tk.Tk):
         The point in the logfile where hands were viewed can be determined by looking
         for a specific command.
         """
-        filepath = self.selected_logfile_path
+        if not self.selected_logfile_path:
+            return
 
         # Slurp the logfile
-        with open(filepath, "r", encoding="utf8") as logfile:
+        with open(self.selected_logfile_path, "r", encoding="utf8") as logfile:
             lines = logfile.readlines()
 
         first_hand_viewed = False
@@ -88,7 +88,7 @@ class App(tk.Tk):
                     break
 
         # Write back the modified data
-        with open(filepath, "w", encoding="utf8") as logfile:
+        with open(self.selected_logfile_path, "w", encoding="utf8") as logfile:
             modified_content = "".join(lines)
             logfile.write(modified_content)
 
