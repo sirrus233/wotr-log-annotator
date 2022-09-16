@@ -59,7 +59,7 @@ class App(tk.Tk):
         )
 
     def _get_cache_file(self) -> str:
-        cache_dir = user_cache_dir(appname="wotr_logfile_annotator", appauthor=None)
+        cache_dir = user_cache_dir(appname="wotr_logfile_annotator")
         cache_file = "cache"
         path = Path(cache_dir, cache_file)
 
