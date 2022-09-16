@@ -11,4 +11,4 @@ After downloading the repository and installing poetry, you can install dependen
 `poetry run pre-commit install`
 
 An executable for your operating system may be built with:  
-`poetry run pyinstaller __main__.spec`
+`poetry run pyinstaller wotr_log_annotator/__main__.py`
