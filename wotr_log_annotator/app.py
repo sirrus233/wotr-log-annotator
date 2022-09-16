@@ -58,22 +58,34 @@ class App(tk.Tk):
             row=3, column=1
         )
 
+    def _get_cache_file(self) -> str:
+        cache_dir = user_cache_dir(appname="wotr_logfile_annotator", appauthor=None)
+        cache_file = "cache"
+        path = Path(cache_dir, cache_file)
+
+        if not path.exists():
+            os.mkdir(cache_dir)
+
+        return str(path)
+
     def select_logfile(self) -> None:
         """Update the application state with a selected logfile. This selected log will
         have its name displayed to the user, and will be modified upon confirmation.
         """
+        cache_file = self._get_cache_file()
         initialdir = ""
-        cache_dir = user_cache_dir(appname="wotr_logfile_annotator", appauthor=None)
-        cache_file = "cache"
 
-        with open(Path(cache_dir, cache_file), "r", encoding="utf8") as cache:
-            initialdir = cache.read()
+        try:
+            with open(cache_file, "r", encoding="utf8") as cache:
+                initialdir = cache.read()
+        except FileNotFoundError:
+            pass
 
         self.selected_logfile_path = filedialog.askopenfilename(initialdir=initialdir)
         self.selected_logfile_display.set(os.path.basename(self.selected_logfile_path))
 
-        with open(Path(cache_dir, cache_file), "w", encoding="utf8") as cache:
-            cache.write(str(Path(self.selected_logfile_path, os.pardir)))
+        with open(cache_file, "w", encoding="utf8") as cache:
+            cache.write(str(Path(self.selected_logfile_path).parent.absolute()))
 
     def modify_logfile(self) -> None:
         """Write passwords to the logfile, and then exit the application.
