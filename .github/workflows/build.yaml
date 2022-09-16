@@ -4,7 +4,7 @@ name: Release
 on:
     push:
         tags:
-            - "v*"
+            - "v*.*.*"
 
 jobs:
     release:
@@ -13,11 +13,11 @@ jobs:
                 os: [ubuntu-latest, macos-latest, windows-latest]
                 include:
                     - os: ubuntu-latest
-                      release_suffix: Linux
+                      release_suffix: linux
                     - os: macos-latest
-                      release_suffix: Mac
+                      release_suffix: mac
                     - os: windows-latest
-                      release_suffix: Windows
+                      release_suffix: windows
 
         runs-on: ${{matrix.os}}
         name: Release
@@ -58,11 +58,11 @@ jobs:
               uses: vimtor/action-zip@v1
               with:
                   files: dist/
-                  dest: wotr_logfile_annotator.zip
+                  dest: wotr_logfile_annotator_${{ matrix.release_suffix }}.zip
 
             - name: ✅ Create Release
-              uses: ncipollo/release-action@v1.10.0
+              uses: softprops/action-gh-release@v0.1.14
               with:
                   draft: false
-                  artifacts: wotr_logfile_annotator.zip
-                  name: Release ${{ github.ref }} ${{ matrix.release_suffix }}
+                  name: Release ${{ github.ref_name }}
+                  files: wotr_logfile_annotator_${{ matrix.release_suffix }}.zip
