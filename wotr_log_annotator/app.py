@@ -19,10 +19,14 @@ class App(tk.Tk):
         self.title("War of the Ring Logfile Updater")
         self.geometry("350x120")
 
-        # App state. Which logfile is currently selected, and how should it be displayed
-        # in the GUI.
+        # App state variables
+
+        # Which logfile is currently selected
         self.selected_logfile_path = ""
+        # How should the selected logfile be displayed in the GUI
         self.selected_logfile_display = tk.StringVar(self, value="")
+        # Current error message.
+        self.error_msg = tk.StringVar(self, value="")
 
         # Labels and input fields for password entry. These will be written into the
         # logfile.
@@ -34,7 +38,7 @@ class App(tk.Tk):
         self.sp_pw = tk.Entry(self)
         self.sp_pw.grid(row=1, column=1)
 
-        # Button to select which logfile should be annotated
+        # Button to select which logfile should be annotated.
         ttk.Button(self, text="Select Logfile", command=self.select_logfile).grid(
             row=2, column=0
         )
@@ -42,9 +46,15 @@ class App(tk.Tk):
             row=2, column=1
         )
 
-        # Final confirm button. Mutates the logfile with all the entered information.
+        # Confirmation button. Mutates the logfile with all the entered information, and
+        # then exits the app.
         self.grid_rowconfigure(3, weight=1)
         ttk.Button(self, text="Confirm", command=self.modify_logfile).grid(row=3)
+
+        # Error message displayed to the user.
+        ttk.Label(self, textvariable=self.error_msg, foreground="#f00").grid(
+            row=3, column=1
+        )
 
     def select_logfile(self) -> None:
         """Update the application state with a selected logfile. This selected log will
@@ -65,6 +75,7 @@ class App(tk.Tk):
         for a specific command.
         """
         if not self.selected_logfile_path:
+            self.error_msg.set("Please select a logfile.")
             return
 
         # Slurp the logfile
