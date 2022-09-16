@@ -1,0 +1,52 @@
+---
+repos:
+    - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+      rev: 0.2.2
+      hooks:
+          - id: yamlfmt
+
+    - repo: local
+      hooks:
+          - id: black
+            name: black
+            entry: poetry run black
+            language: system
+            types: [python]
+            require_serial: true
+
+          - id: isort
+            name: isort
+            entry: poetry run isort
+            language: system
+            types: [python]
+            require_serial: true
+
+          - id: mypy
+            name: mypy
+            entry: poetry run mypy
+            language: system
+            types: [python]
+            require_serial: true
+
+          - id: flake8
+            name: flake8
+            entry: poetry run flake8
+            args: [--max-line-length=88]
+            language: system
+            types: [python]
+            require_serial: true
+
+          - id: pylint
+            name: pylint
+            entry: poetry run pylint
+            args: [--jobs=4]
+            language: system
+            types: [python]
+            require_serial: true
+
+          - id: bandit
+            name: bandit
+            entry: poetry run bandit
+            args: [--configfile, pyproject.toml]
+            language: system
+            types: [python]

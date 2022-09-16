@@ -1,0 +1,43 @@
+[tool.poetry]
+authors = ["Bradley Sherman <sirrus233@gmail.com>"]
+description = "Annotates logfiles from the War of the Ring Java client with your passwords."
+license = "MIT"
+name = "wotr-log-annotator"
+packages = [{ include = "wotr_log_annotator" }]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.dev.dependencies]
+bandit = { version = "^1.7.4", extras = ["toml"] }
+black = "^22.8.0"
+flake8 = "^5.0.4"
+mypy = "^0.971"
+pre-commit = "^2.20.0"
+pylint = "^2.15.2"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict = true
+
+[tool.pylint.miscellaneous]
+ignore-imports = "yes"
+notes = ["FIXME", "XXX"]
+
+[tool.pytest.ini_options]
+addopts = """\
+  --cov=wotr_log_annotator \
+  --cov-report=term-missing \
+  --cov-branch \
+"""
+
+[tool.bandit]
+exclude_dirs = ["tests"]
