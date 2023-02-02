@@ -65,7 +65,7 @@ class App(tk.Tk):
         path = Path(cache_dir, cache_file)
 
         if not path.exists():
-            os.makedirs(cache_dir)
+            path.parent.mkdir(parents=True, exist_ok=True)
 
         return str(path)
 
