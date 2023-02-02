@@ -9,6 +9,7 @@ from appdirs import user_cache_dir
 
 VIEW_FREE_CMD = "<~Controls.464~>"
 VIEW_SHADOW_CMD = "<~Controls.479~>"
+ENCODING = "iso-8859-1"
 
 
 class App(tk.Tk):
@@ -76,7 +77,7 @@ class App(tk.Tk):
         initialdir = ""
 
         try:
-            with open(cache_file, "r", encoding="utf8") as cache:
+            with open(cache_file, "r", encoding=ENCODING) as cache:
                 initialdir = cache.read()
         except FileNotFoundError:
             pass
@@ -84,7 +85,7 @@ class App(tk.Tk):
         self.selected_logfile_path = filedialog.askopenfilename(initialdir=initialdir)
         self.selected_logfile_display.set(os.path.basename(self.selected_logfile_path))
 
-        with open(cache_file, "w", encoding="utf8") as cache:
+        with open(cache_file, "w", encoding=ENCODING) as cache:
             cache.write(str(Path(self.selected_logfile_path).parent.absolute()))
 
     def modify_logfile(self) -> None:
@@ -103,7 +104,7 @@ class App(tk.Tk):
             return
 
         # Slurp the logfile
-        with open(self.selected_logfile_path, "r", encoding="utf8") as logfile:
+        with open(self.selected_logfile_path, "r", encoding=ENCODING) as logfile:
             lines = logfile.readlines()
 
         first_hand_viewed = False
@@ -123,7 +124,7 @@ class App(tk.Tk):
                     break
 
         # Write back the modified data
-        with open(self.selected_logfile_path, "w", encoding="utf8") as logfile:
+        with open(self.selected_logfile_path, "w", encoding=ENCODING) as logfile:
             modified_content = "".join(lines)
             logfile.write(modified_content)
 
