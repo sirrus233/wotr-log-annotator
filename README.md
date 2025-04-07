@@ -5,7 +5,7 @@ And maybe the password of your opponent, if you ask them nicely.
 
 ## Recommended Usage
 
-1. Open the annotator when you start a game on the WotR Java client.
+1. Run the annotator when you start a game on the WotR Java client.
 2. When you view your hand in the Java client, also write your password in the proper field in the annotator.
    **DO NOT CLOSE IT**, just leave it open in the background while you play!
 3. When you are done with your game, save your logfile as usual.
